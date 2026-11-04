@@ -26,6 +26,10 @@
 </select>
 </label>
 <button class="btn" id="runReport">Tampilkan Laporan</button>
+  <div class="row" style="margin-top:10px">
+<button class="btn" type="button" id="printReport">Cetak Laporan</button>
+<button class="btn secondary" type="button" id="pdfReport">Unduh PDF</button>
+  </div>
 <div id="reportMsg" class="muted"></div>
 <div class="metric" style="margin-top:12px">
 <small>Jumlah Transaksi</small>
@@ -83,6 +87,15 @@ const date=new Date(r.created_at).toLocaleString('id-ID');
 return `<div class="item"><div><b>${esc(r.invoice_no||'-')}</b><br><span class="muted">${esc(b?.name||r.branch_id)} · ${esc(date)}</span></div><b>${money(r.total)}</b></div>`;
 }).join('')||'<p class="muted">Belum ada transaksi pada periode ini.</p>';
 }
-$('runReport').addEventListener('click',loadSalesReport);boot();
+$('runReport').addEventListener('click',loadSalesReport);function printSalesReport(){
+const content=$('reportsPage').innerHTML;
+const w=window.open('','_blank');
+if(!w){alert('Izinkan pop-up untuk mencetak laporan.');return;}
+w.document.write('<html><head><title>Laporan Penjualan ANUM GROUP</title><style>body{font-family:Arial;padding:24px;color:#222}h2{margin-bottom:8px}.btn,button{display:none}.metric{padding:12px;border:1px solid #ddd;margin:10px 0}.item{padding:10px;border-bottom:1px solid #ddd}.muted{color:#666}</style></head><body><h2>ANUM GROUP</h2>'+content+'</body></html>');
+w.document.close();
+w.onload=()=>{w.print();};
+}
+$('printReport').addEventListener('click',printSalesReport);
+$('pdfReport').addEventListener('click',printSalesReport);boot();
 
 </script></body></html>
